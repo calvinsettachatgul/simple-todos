@@ -1,10 +1,33 @@
 Tasks = new Mongo.Collection("tasks");
 
-if (Meteor.isClient) {
-  // This code only runs on the client
+if (Meteor.isClient){
+
   Template.body.helpers({
-    tasks: function () {
+    tasks: function() {
       return Tasks.find({});
+    }
+  });
+
+  //add event handler for form submit
+
+  Template.body.events({
+    "submit .new-task": function(event){
+      // Prevent default browser for submit
+      event.preventDefault();
+
+      //get value from form element
+
+      var text = event.target.text.value;
+
+      // insert a task into the colleciton
+
+      Tasks.insert({
+        text: text,
+        createdAt: new Date() // current time
+      });
+
+      //clear form
+      event.target.text.value = "";
     }
   });
 }
